@@ -13,7 +13,7 @@ FROM docker:cli
 WORKDIR /app
 
 
-COPY --from=builder /app/program-search /app
+COPY --from=builder /app/program /app
 COPY --from=builder /app/init.sql /app
 
 
