@@ -12,6 +12,8 @@ FROM postgres:alpine
 
 WORKDIR /app
 
+ENV POSTGRES_PASSWORD=1
+
 COPY --from=builder /app/program /app
 COPY --from=builder /app/init.sql /docker-entrypoint-initdb.d/init.sql
 
