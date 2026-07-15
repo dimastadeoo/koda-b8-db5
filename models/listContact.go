@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"time"
-
 	"github.com/jackc/pgx/v5"
 )
 
@@ -24,4 +23,16 @@ func GetAllData(conn *pgx.Conn) ([]ListContact, error) {
 	`)
 	lists, err := pgx.CollectRows(rows, pgx.RowToStructByName[ListContact])
 	return lists, err
+}
+
+func AddDataList(data ListContact, conn *pgx.Conn) (ListContact, error){
+	rows, _ := conn.Query(context.Background(), `
+		INSERT INTO list_contact  (fullname, no_hp, email)
+		VALUES ($1, $2, $3)
+		RETURNING id, fullname, no_hp, email, created_at, updated_at
+	`, data.Fullname, data.No_Hp, data.Email)
+
+	list, err := pgx.CollectOneRow(rows, pgx.RowToAddrOfStructByName[ListContact])
+
+	return *list, err
 }
