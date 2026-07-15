@@ -1,0 +1,8 @@
+CREATE TABLE "list_contact" (
+    "id" BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    "fullname" VARCHAR(80) NOT NULL,
+    "no_hp" INT NOT NULL UNIQUE,
+    "email" VARCHAR(80) NOT NULL UNIQUE,
+    "created_at" TIMESTAMP DEFAULT NOW(),
+    "updated_at" TIMESTAMP DEFAULT NOW()
+);
