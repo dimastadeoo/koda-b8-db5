@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 )
 func Input() string{
@@ -13,4 +14,9 @@ func Input() string{
 		return ""
 	}
 	return ""
+}
+
+func PressEnter(mss string) {
+	fmt.Print(mss)
+	fmt.Scanln()
 }
