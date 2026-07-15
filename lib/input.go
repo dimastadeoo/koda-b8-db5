@@ -4,17 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
-func Input() string {
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		return scanner.Text() // Println will add back the final '\n'
-	}
-	if err := scanner.Err(); err != nil {
-		return ""
-	}
-	return ""
+func Input(input string) string {
+	reader := bufio.NewReader(os.Stdin)
+	fmt.Print(input)
+	text, _ := reader.ReadString('\n')
+	return strings.TrimSpace(text)
 }
 
 func PressEnter(mss string) {
