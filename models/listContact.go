@@ -21,6 +21,8 @@ func GetAllData(conn *pgx.Conn) ([]ListContact, error) {
 		SELECT id, fullname, no_hp, email, created_at, updated_at
 		FROM list_contact
 	`)
+	defer rows.Close()
+
 	lists, err := pgx.CollectRows(rows, pgx.RowToStructByName[ListContact])
 	return lists, err
 }
@@ -31,28 +33,29 @@ func AddDataList(data ListContact, conn *pgx.Conn) (ListContact, error){
 		VALUES ($1, $2, $3)
 		RETURNING id, fullname, no_hp, email, created_at, updated_at
 	`, data.Fullname, data.No_Hp, data.Email)
+	defer rows.Close()
 
-	list, err := pgx.CollectOneRow(rows, pgx.RowToAddrOfStructByName[ListContact])
 
-	return *list, err
+	list, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[ListContact])
+
+	return list, err
 }
 
 func GetDataByEmail(email string, conn *pgx.Conn) (ListContact, error){
 	rows, _ := conn.Query(context.Background(), `
-		SELECT id, fullname, no_hp, email 
+		SELECT id, fullname, no_hp, email, created_at, updated_at 
 		FROM list_contact WHERE email = $1
 	`, email)
+	defer rows.Close()
 
-	list, err := pgx.CollectOneRow(rows, pgx.RowToAddrOfStructByName[ListContact])
+	list, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[ListContact])
 
-	return *list, err
-
-
+	return list, err
 
 }
 
 func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, error){
-	rows, _ := conn.Query(context.Background(), `
+	rows, err := conn.Query(context.Background(), `
 		UPDATE list_contact 
 		SET fullname = $1, 
 		no_hp = $2, 
@@ -62,9 +65,14 @@ func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, erro
 		RETURNING id, fullname, no_hp, email, created_at, updated_at
 	`, data.Fullname, data.No_Hp, data.Email, id)
 
-	list, err := pgx.CollectOneRow(rows, pgx.RowToAddrOfStructByName[ListContact])
+	if err != nil {
+		return ListContact{}, err
+	}
+	defer rows.Close()
 
-	return *list, err
+	list, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[ListContact])
+
+	return list, err
 }
 
 
