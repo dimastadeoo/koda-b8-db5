@@ -55,7 +55,7 @@ func GetDataByEmail(email string, conn *pgx.Conn) (ListContact, error){
 }
 
 func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, error){
-	rows, err := conn.Query(context.Background(), `
+	rows, _ := conn.Query(context.Background(), `
 		UPDATE list_contact 
 		SET fullname = $1, 
 		no_hp = $2, 
@@ -64,15 +64,21 @@ func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, erro
 		WHERE id = $4
 		RETURNING id, fullname, no_hp, email, created_at, updated_at
 	`, data.Fullname, data.No_Hp, data.Email, id)
-
-	if err != nil {
-		return ListContact{}, err
-	}
 	defer rows.Close()
 
 	list, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[ListContact])
 
 	return list, err
+}
+
+func DeleteDataList(id int, conn *pgx.Conn) error{
+	_, err := conn.Query(context.Background(), `
+		DELETE FROM list_contact 
+		WHERE id = $1
+		RETURNING id, fullname, no_hp, email, created_at, updated_at
+	`, id)
+
+	return err
 }
 
 
