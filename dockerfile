@@ -14,16 +14,8 @@ WORKDIR /app
 
 ENV POSTGRES_PASSWORD=1
 
-COPY --from=builder /app/program /app
+COPY --from=builder /app/program .
 COPY --from=builder /app/init.sql /docker-entrypoint-initdb.d/init.sql
-COPY --chmod=755 entrypoint.sh /app/entrypoint.sh
-
-
-# RUN apk add --no-cache docker-cli
-# RUN docker run -v /var/run/docker.sock:/var/run/docker.sock myimage
-
-
-# RUN docker pull postgres:alpine
-# RUN docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=1 -e POSTGRES_DB=postgres --name postgres --restart=always -v $(pwd)/init.sql:/docker-entrypoint-initdb.d/init.sql postgres:alpine
+COPY --chmod=755 entrypoint.sh .
 
 CMD ["/app/entrypoint.sh"]

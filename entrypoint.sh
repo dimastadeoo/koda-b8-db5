@@ -1,7 +1,8 @@
 #!/bin/sh
 docker-entrypoint.sh postgres &
 
-env | grep '^POSTGRES_' | sed 's/^POSTGRES_/PG/' > /var/app/.env
+# Write .env to /app/.env and keep POSTGRES_ prefix
+env | grep '^POSTGRES_' > /app/.env
 
 until pg_isready -q; do sleep 1; done
 exec /app/program
