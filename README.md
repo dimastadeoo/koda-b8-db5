@@ -2,6 +2,12 @@
 
 ## Berikut merupakan tampilan ERD dengan mermaid untuk contact list
 
+### Akses Aplikasi
+
+```sh
+docker pull ghcr.io/dimastadeoo/koda-b8-db5:latest
+```
+
 ```mermaid
 
 erDiagram
