@@ -16,7 +16,8 @@ ENV POSTGRES_PASSWORD=1
 
 COPY --from=builder /app/program /app
 COPY --from=builder /app/init.sql /docker-entrypoint-initdb.d/init.sql
-COPY --from=builder /app/entrypoint.sh /app/entrypoint.sh
+COPY --chmod=755 entrypoint.sh /app/entrypoint.sh
+
 
 # RUN apk add --no-cache docker-cli
 # RUN docker run -v /var/run/docker.sock:/var/run/docker.sock myimage
