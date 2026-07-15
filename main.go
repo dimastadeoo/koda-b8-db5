@@ -35,14 +35,11 @@ func displayAllData(conn *pgx.Conn) {
 func addData(conn *pgx.Conn) {
 	for {
 		fmt.Println("Input Contact List")
-		fmt.Print("Nama Lengkap: ")
-		name := lib.Input()
-		fmt.Print("Email: ")
-		email := lib.Input()
+		name := lib.Input("Nama Lengkap: ")
+		email := lib.Input("Email: ")
 		noHp := 0
 		for {
-			fmt.Print("No Hp: ")
-			input, err := strconv.Atoi(lib.Input())
+			input, err := strconv.Atoi(lib.Input("No Hp: "))
 			if err == nil {
 				noHp = input
 				break
@@ -71,8 +68,7 @@ func addData(conn *pgx.Conn) {
 func editData(conn *pgx.Conn) {
 	for {
 		displayAllData(conn)
-		fmt.Print("Input Email yang ingin update data: ")
-		email := lib.Input()
+		email := lib.Input("Input Email yang ingin update data: ")
 
 		list, err := models.GetDataByEmail(email, conn)
 
@@ -86,18 +82,15 @@ func editData(conn *pgx.Conn) {
 		fmt.Println("Update Data")
 		for {
 			fmt.Printf("Email lama: %s\n", list.Email)
-			fmt.Print("Email Baru: ")
-			email := lib.Input()
+			email := lib.Input("Email Baru: ")
 			fmt.Println("---------------------------")
 			fmt.Printf("Nama lama: %s\n", list.Fullname)
-			fmt.Print("Nama Baru: ")
-			name := lib.Input()
+			name := lib.Input("Nama Baru: ")
 			fmt.Println("---------------------------")
 			fmt.Printf("No Hp lama: 0%d\n", list.No_Hp)
 			noHp := 0
 			for {
-				fmt.Print("No Hp Baru: ")
-				input, err := strconv.Atoi(lib.Input())
+				input, err := strconv.Atoi(lib.Input(("No Hp Baru: ")))
 				if err == nil {
 					noHp = input
 					break
@@ -125,8 +118,7 @@ func editData(conn *pgx.Conn) {
 func deletData(conn *pgx.Conn) {
 	for {
 		displayAllData(conn)
-		fmt.Print("Input Email yang ingin Dihapus: ")
-		email := lib.Input()
+		email := lib.Input("Input Email yang ingin Dihapus: ")
 
 		list, err := models.GetDataByEmail(email, conn)
 
@@ -136,8 +128,7 @@ func deletData(conn *pgx.Conn) {
 		}
 		lib.CallClear()
 		fmt.Printf("Email %s Ditemukan\n", list.Email)
-		fmt.Print("Konfirmasi Hapus Y / N: ")
-		choice := lib.Input()
+		choice := lib.Input("Konfirmasi Hapus Y / N: ")
 		if choice == "N" || choice == "n" {
 			fmt.Println("Delete data dibatalkan")
 			break
@@ -202,8 +193,7 @@ func main() {
 		4. Display All Data
 		5. Exit`)
 		fmt.Println("---------------------------------------")
-		fmt.Print("Input Pilihan: ")
-		choice := lib.Input()
+		choice := lib.Input("Input Pilihan: ")
 		choiceList(&choice)
 	}
 

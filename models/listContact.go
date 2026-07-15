@@ -16,6 +16,17 @@ type ListContact struct {
 	Updated_At time.Time
 }
 
+// func queryOne[T any](conn *pgx.Conn, sql string, args ...any) (T, error){
+// 	rows, err := conn.Query(context.Background(), sql, args...)
+// 	if err != nil {
+// 		var Zero
+// 	}
+// 	defer rows.Close()
+
+// 	lists, err := pgx.CollectRows(rows, pgx.RowToStructByName[ListContact])
+// 	return lists, err
+// }
+
 func GetAllData(conn *pgx.Conn) ([]ListContact, error) {
 
 	rows, _ := conn.Query(context.Background(), `
