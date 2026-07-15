@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"os"
 )
-func Input() string{
-		scanner := bufio.NewScanner(os.Stdin)
+
+func Input() string {
+	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		return scanner.Text() // Println will add back the final '\n'
 	}

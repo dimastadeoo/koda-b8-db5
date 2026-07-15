@@ -1,6 +1,5 @@
 package lib
 
-
 import (
 	"os"
 	"os/exec"

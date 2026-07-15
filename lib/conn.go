@@ -9,8 +9,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-
-func Conn() *pgx.Conn{
+func Conn() *pgx.Conn {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Cannot read file ekstensions .env")

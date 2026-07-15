@@ -3,14 +3,15 @@ package models
 import (
 	"context"
 	"time"
+
 	"github.com/jackc/pgx/v5"
 )
 
 type ListContact struct {
-	Id    int
-	Fullname  string
-	No_Hp int
-	Email string
+	Id         int
+	Fullname   string
+	No_Hp      int
+	Email      string
 	Created_At time.Time
 	Updated_At time.Time
 }
@@ -27,7 +28,7 @@ func GetAllData(conn *pgx.Conn) ([]ListContact, error) {
 	return lists, err
 }
 
-func AddDataList(data ListContact, conn *pgx.Conn) (ListContact, error){
+func AddDataList(data ListContact, conn *pgx.Conn) (ListContact, error) {
 	rows, _ := conn.Query(context.Background(), `
 		INSERT INTO list_contact  (fullname, no_hp, email)
 		VALUES ($1, $2, $3)
@@ -35,13 +36,12 @@ func AddDataList(data ListContact, conn *pgx.Conn) (ListContact, error){
 	`, data.Fullname, data.No_Hp, data.Email)
 	defer rows.Close()
 
-
 	list, err := pgx.CollectOneRow(rows, pgx.RowToStructByName[ListContact])
 
 	return list, err
 }
 
-func GetDataByEmail(email string, conn *pgx.Conn) (ListContact, error){
+func GetDataByEmail(email string, conn *pgx.Conn) (ListContact, error) {
 	rows, _ := conn.Query(context.Background(), `
 		SELECT id, fullname, no_hp, email, created_at, updated_at 
 		FROM list_contact WHERE email = $1
@@ -54,7 +54,7 @@ func GetDataByEmail(email string, conn *pgx.Conn) (ListContact, error){
 
 }
 
-func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, error){
+func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, error) {
 	rows, _ := conn.Query(context.Background(), `
 		UPDATE list_contact 
 		SET fullname = $1, 
@@ -71,7 +71,7 @@ func UpdateDataList(id int, data ListContact, conn *pgx.Conn) (ListContact, erro
 	return list, err
 }
 
-func DeleteDataList(id int, conn *pgx.Conn) error{
+func DeleteDataList(id int, conn *pgx.Conn) error {
 	_, err := conn.Query(context.Background(), `
 		DELETE FROM list_contact 
 		WHERE id = $1
@@ -80,5 +80,3 @@ func DeleteDataList(id int, conn *pgx.Conn) error{
 
 	return err
 }
-
-
