@@ -30,8 +30,6 @@ func displayAllData(conn *pgx.Conn){
 		fmt.Printf("Created At: %s\n", list.Created_At.Format("02/01/2006 15:04:05"))
 		fmt.Printf("Last Update: %s\n", list.Updated_At.Format("02/01/2006 15:04:05"))
 		fmt.Println("------------------------------------")
-
-
 	}
 	fmt.Println("------------------------------------")
 
@@ -74,10 +72,9 @@ func addData(conn *pgx.Conn){
 	}
 }
 
-
-
 func editData(conn *pgx.Conn){
 	for{
+		displayAllData(conn)
 		fmt.Print("Input Email yang ingin update data: ")
 		email := lib.Input()
 
@@ -129,8 +126,42 @@ func editData(conn *pgx.Conn){
 	}
 }
 
+func deletData(conn *pgx.Conn){
+	for{
+		displayAllData(conn)
+		fmt.Print("Input Email yang ingin Dihapus: ")
+		email := lib.Input()
 
+		list, err := models.GetDataByEmail(email, conn)
 
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		lib.CallClear()
+		fmt.Printf("Email %s Ditemukan\n", list.Email)
+		fmt.Print("Konfirmasi Hapus Y / N: ")
+		choice := lib.Input()
+		if choice == "N" || choice == "n" {
+			fmt.Println("Delete data dibatalkan")
+			break
+		}else if choice == "Y" || choice =="y" {
+			err := models.DeleteDataList(list.Id, conn)
+
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println("Berhasil Hapus Data")
+			break
+		}
+
+		lib.PressEnter("Pilihan Salah Enter untuk Ulangi Input email")
+		lib.CallClear()
+		
+
+	}
+
+}
 
 
 func choiceList(choice *string){
@@ -144,11 +175,12 @@ func choiceList(choice *string){
 		lib.PressEnter("Tekan Enter untuk Kembali")		
 	case "2" :
 		lib.CallClear()
-		displayAllData(conn)
 		editData(conn)
 		lib.PressEnter("Tekan Enter untuk Kembali")	
 	case "3" :
-		
+		lib.CallClear()
+		deletData(conn)
+		lib.PressEnter("Tekan Enter untuk Kembali")	
 	case "4" :
 		lib.CallClear()
 		displayAllData(conn)
